@@ -1,0 +1,174 @@
+-- Switch to the database
+USE zenclass;
+
+-- Create users table
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    age INT
+);
+
+-- Create attendance table
+CREATE TABLE attendance (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    date DATE,
+    status ENUM('present', 'absent'),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- Create topics table
+CREATE TABLE topics (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    taught_date DATE
+);
+
+-- Create tasks table
+CREATE TABLE tasks (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    due_date DATE,
+    submitted BOOLEAN,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- Create company_drives table
+CREATE TABLE company_drives (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    company_name VARCHAR(255) NOT NULL,
+    drive_date DATE,
+    positions VARCHAR(255),
+    location VARCHAR(255)
+);
+
+-- Create mentors table
+CREATE TABLE mentors (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255),
+    expertise VARCHAR(255)
+);
+
+-- Create mentees table
+CREATE TABLE mentees (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    mentor_id INT,
+    user_id INT,
+    FOREIGN KEY (mentor_id) REFERENCES mentors(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- Create coding_problems table
+CREATE TABLE coding_problems (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    problem_name VARCHAR(255),
+    solved BOOLEAN,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- Insert sample users
+INSERT INTO users (name, email, age) VALUES 
+('student1', 'student1@example.com', 25),
+('student2', 'student2@example.com', 28),
+('student3', 'student3@example.com', 23);
+
+-- Insert sample attendance
+INSERT INTO attendance (user_id, date, status) VALUES 
+(1, '2020-10-15', 'absent'),
+(2, '2020-10-20', 'absent'),
+(1, '2020-10-16', 'present');
+
+-- Insert sample topics
+INSERT INTO topics (name, description, taught_date) VALUES 
+('Introduction to Databases', 'Overview of databases', '2023-10-05'),
+('Advanced SQL', 'In-depth SQL techniques', '2023-10-12'),
+('Database Optimization', 'Optimization strategies', '2023-10-25');
+
+-- Insert sample tasks
+INSERT INTO tasks (user_id, name, description, due_date, submitted) VALUES 
+(1, 'Database Homework', 'Complete the database assignment', '2020-10-20', FALSE),
+(2, 'SQL Project', 'Build a project using SQL', '2020-10-25', FALSE),
+(3, 'Optimization Task', 'Optimize the given queries', '2023-10-30', TRUE);
+
+-- Insert sample company drives
+INSERT INTO company_drives (company_name, drive_date, positions, location) VALUES 
+('Tech Innovators', '2023-10-16', 'Software Engineer, Data Scientist', 'San Francisco, CA'),
+('Future Solutions', '2023-10-20', 'DevOps Engineer, System Administrator', 'New York, NY');
+
+-- Insert sample mentors
+INSERT INTO mentors (name, email, expertise) VALUES 
+('mentor1', 'mentor1@example.com', 'Software Development'),
+('mentor2', 'mentor2@example.com', 'Data Science'),
+('mentor3', 'mentor3@example.com', 'Web Development');
+
+-- Insert sample mentees
+INSERT INTO mentees (mentor_id, user_id) VALUES 
+(1, 1),
+(1, 2),
+(2, 3);
+
+-- Insert sample coding problems
+INSERT INTO coding_problems (user_id, problem_name, solved) VALUES 
+(1, 'Problem 1', TRUE),
+(1, 'Problem 2', TRUE),
+(2, 'Problem 3', TRUE),
+(2, 'Problem 4', FALSE),
+(3, 'Problem 5', FALSE);
+
+SELECT * FROM zenclass.users;
+1	student1	student1@example.com	25
+2	student2	student2@example.com	28
+3	student3	student3@example.com	23
+
+SELECT * FROM zenclass.attendance;
+1	1	2020-10-15	absent
+2	2	2020-10-20	absent
+3	1	2020-10-16	present
+
+SELECT * FROM zenclass.company_drives;
+1	Tech Innovators	2023-10-16	Software Engineer, Data Scientist	San Francisco, CA
+2	Future Solutions	2023-10-20	DevOps Engineer, System Administrator	New York, NY
+3	Tech Innovators	2023-10-16	Software Engineer, Data Scientist	San Francisco, CA
+4	Future Solutions	2023-10-20	DevOps Engineer, System Administrator	New York, NY
+
+SELECT * FROM zenclass.coding_problems;
+	id	user_id	problem_name	solved
+	1	1	Problem 1	1
+	2	1	Problem 2	1
+	3	2	Problem 3	1
+	4	2	Problem 4	0
+	5	3	Problem 5	0
+
+SELECT * FROM zenclass.mentors;
+1	mentor1	mentor1@example.com	Software Development
+2	mentor2	mentor3@example.com	Data Science
+3	mentor3	mentor3@example.com	Web Development
+4	mentor1	mentor1@example.com	Software Development
+5	mentor2	mentor3@example.com	Data Science
+6	mentor3	mentor3@example.com	Web Development
+
+SELECT * FROM zenclass.mentees;
+1	1	1
+2	1	2
+3	2	3
+4	1	1
+5	1	2
+6	2	3
+
+SELECT * FROM zenclass.tasks;
+1	1	Database Homework	Complete the database assignment	2020-10-20	0
+2	2	SQL Project	Build a project using SQL	2020-10-25	0
+3	3	Optimization Task	Optimize the given queries	2023-10-30	1
+
+SELECT * FROM zenclass.topics;
+1	Introduction to Databases	Overview of databases	2023-10-05
+2	Advanced SQL	In-depth SQL techniques	2023-10-12
+3	Database Optimization	Optimization strategies	2023-10-25
+			
+			
